@@ -1,0 +1,31 @@
+{% extends '_base.html'%}
+
+{% block title %}
+Home Page
+{% endblock %}
+{% block content %}
+    <h1>We are the emerging ecommerce in City.</h1>
+
+    <div class="row gx-5">
+    {% for product in product_list %}
+    
+      <div class="col-md-3">
+        <a href="{% url 'ecomapp:product-detail' product.slug %} " class="text-decoration-none text-dark">
+        <div class="img-container bg-light text-center">
+          <img src="{{ product.image.url}}" class="img-fluid" alt="" style="width:200;object-fit:cover;">
+        </div>
+        <div class="product-data">
+          <h3>{{product.title}}</h3>
+          <p>Price: <span class="text-decoration-line-through">  Rs.{{ product.marked_price}}</span>  Rs.{{product.selling_price}}</p>
+        </div>
+        <div>
+          <a href="{% url 'ecomapp:add-cart' product.id %}" class="btn btn-primary w-100">Add To Cart</a>
+        </div>
+  </a>
+      </div>
+      
+
+
+    {% endfor %}
+    </div>
+{% endblock %}
