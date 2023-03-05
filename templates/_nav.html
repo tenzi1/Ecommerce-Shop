@@ -34,6 +34,9 @@
         </li>
 
         {% if not user.is_authenticated %}
+            <li class="nav-item">
+          <a class="nav-link" href="{% url 'ecomapp:profile'%}">Profile</a>
+        </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'ecomapp:customerregistration'%}">Register</a>
         </li>
@@ -45,6 +48,9 @@
         <p>Welcome {{user.username}}</p>
 <li class="nav-item">
           <a class="nav-link" href="{% url 'ecomapp:logout'%}">Logout</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'ecomapp:profile'%}">Profile</a>
         </li>
         {% endif%}
         

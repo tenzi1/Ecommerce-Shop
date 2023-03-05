@@ -4,10 +4,34 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 
 from .forms import CheckoutForm, CustomerRegistrationForm
-from .models import Product, Cart, CartProduct
+from .models import Product, Cart, CartProduct, Customer, Order
+
+class EcomMixin(object):
+    def dispatch(self, request, *args, **kwargs):
+        cart_id = request.session.get('cart_id')
+        if cart_id:
+            cart_obj = Cart.objects.get(id=cart_id)
+            if request.user.customer and self.request.user.is_authenticated:
+                cart_obj.customer = request.user.customer
+                cart_obj.save()
+            # has_customer = False
+            # try:
+            #     has_customer = (request.user.customer is not None)
+            # except Customer.DoesNotExist:
+            #     pass
+            # if has_customer and self.request.user.is_authenticated:
+            #     cart_obj.customer = request.user.customer
+            #     cart_obj.save()
+        # if request.user.customer and self.request.user.is_authenticated:
+        #     cart_obj.customer = request.user.customer
+        #     cart_obj.save()
+        return super().dispatch(request, *args, **kwargs)
+    
+
+
 
 class HomeView(ListView):
     model = Product
@@ -21,14 +45,14 @@ class ContactView(TemplateView):
     template_name = 'contact.html'
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(EcomMixin,DetailView):
     model = Product
     template_name = 'product_detail.html'
     context_object_name = 'product'
 
 
 #Add cart view
-class AddCartView(TemplateView):
+class AddCartView(EcomMixin,TemplateView):
     template_name = "cart.html"
 
     def get_context_data(self, **kwargs):
@@ -81,7 +105,7 @@ class MyCartView(TemplateView):
     
 
 
-class ManageCartVie(View):
+class ManageCartVie(EcomMixin,View):
     def get(self, request, *args, **kwargs):
         cp_id = kwargs['cp_id']
         action = request.GET.get('action')
@@ -114,7 +138,7 @@ class ManageCartVie(View):
 
 
 
-class ClearCartView(View):
+class ClearCartView(EcomMixin,View):
     def get(self, request, *args, **kwargs):
         cart_id = request.session.get('cart_id')
         if cart_id:
@@ -123,11 +147,23 @@ class ClearCartView(View):
             cart.total = 0
             cart.save()
         return redirect("ecomapp:my-cart")
-    
-class CheckoutView(CreateView):
+
+
+class CheckoutView(LoginRequiredMixin,EcomMixin,CreateView):
     template_name = 'checkout.html'
     form_class = CheckoutForm
     success_url = reverse_lazy('ecomapp:home')
+
+    # def test_func(self):
+    #     print("Testing authentication", self.request.user)
+    #     # return self.request.user.is_authenticated and (self.request.user.customer is not None)
+    #     has_customer = False
+    #     try:
+    #         has_customer = (self.request.user.customer is not None)
+    #     except Customer.DoesNotExist:
+    #         pass
+    #     return has_customer and self.request.user.is_authenticated
+
 
     def get_context_data(self, **kwargs): 
         context = super().get_context_data(**kwargs)
@@ -201,3 +237,15 @@ class CustomerLogoutView(View):
     def get(self, request):
         logout(request)
         return redirect("ecomapp:home")
+
+
+class CustomerProfileView(LoginRequiredMixin,TemplateView):
+    template_name = 'profile.html'
+    
+
+    def get_context_data(self, **kwargs):
+        context =  super().get_context_data(**kwargs)
+        customer = self.request.user.customer
+        context['customer'] = customer
+        context['orders'] = Order.objects.filter(cart__customer=customer)
+        return context

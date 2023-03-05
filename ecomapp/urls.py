@@ -3,7 +3,8 @@ from django.urls import path
 from .views import (
     HomeView, AboutView, ContactView, ProductDetailView, AddCartView, 
     MyCartView, ManageCartVie,ClearCartView, CheckoutView,
-    CustomerRegistrationView, CustomerLoginView, CustomerLogoutView)
+    CustomerRegistrationView, CustomerLoginView, CustomerLogoutView,
+    CustomerProfileView,)
 
 app_name = 'ecomapp'
 
@@ -20,5 +21,5 @@ urlpatterns = [
     path("register/",CustomerRegistrationView.as_view(), name="customerregistration"),
     path("login",CustomerLoginView.as_view() , name="customerlogin"),
     path("logout/",CustomerLogoutView.as_view() , name="logout"),
-
+    path("profile/", CustomerProfileView.as_view(), name="profile")
 ]
