@@ -32,6 +32,22 @@
             <li><a class="dropdown-item" href="#">Something else here</a></li>
           </ul>
         </li>
+
+        {% if not user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'ecomapp:customerregistration'%}">Register</a>
+        </li>
+        
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'ecomapp:customerlogin'%}">Login</a>
+        </li>
+        {% else %}
+        <p>Welcome {{user.username}}</p>
+<li class="nav-item">
+          <a class="nav-link" href="{% url 'ecomapp:logout'%}">Logout</a>
+        </li>
+        {% endif%}
+        
      
       </ul>
       <form class="d-flex" role="search">

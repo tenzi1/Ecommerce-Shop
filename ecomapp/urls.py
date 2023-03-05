@@ -1,6 +1,9 @@
+from django.views.generic import TemplateView
 from django.urls import path
 from .views import (
-    HomeView, AboutView, ContactView, ProductDetailView, AddCartView, MyCartView, ManageCartVie, ClearCartView)
+    HomeView, AboutView, ContactView, ProductDetailView, AddCartView, 
+    MyCartView, ManageCartVie,ClearCartView, CheckoutView,
+    CustomerRegistrationView, CustomerLoginView, CustomerLogoutView)
 
 app_name = 'ecomapp'
 
@@ -13,5 +16,9 @@ urlpatterns = [
     path("mycart/",MyCartView.as_view(), name="my-cart"),
     path('manage-cart/<int:cp_id>/', ManageCartVie.as_view(), name="manage-cart"),
     path("empty-cart/", ClearCartView.as_view(), name='empty-cart' ),
-    
+    path("checkout/", CheckoutView.as_view(), name='checkout' ),
+    path("register/",CustomerRegistrationView.as_view(), name="customerregistration"),
+    path("login",CustomerLoginView.as_view() , name="customerlogin"),
+    path("logout/",CustomerLogoutView.as_view() , name="logout"),
+
 ]
