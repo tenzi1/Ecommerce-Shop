@@ -6,6 +6,16 @@ from django.utils.text import slugify
 
 User = get_user_model()
 
+class Admin(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=250)
+    image= models.ImageField(upload_to="admins")
+    mobile = models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.user.username
+    
+
 class Category(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)

@@ -27,7 +27,5 @@ class CustomerRegistrationForm(forms.ModelForm):
         return username
 
 
-# LoginForm
-
 
         
