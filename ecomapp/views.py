@@ -11,6 +11,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
+from django.db.models import Q
 
 from .forms import CheckoutForm, CustomerRegistrationForm
 from .models import Admin, Product, Cart, CartProduct, Customer, Order
@@ -347,3 +348,18 @@ class AdminOrderStatusChangeView(AdminRequiredMixin, View):
         return redirect(
             reverse_lazy("ecomapp:admin_order_detail", kwargs={"pk": self.kwargs["pk"]})
         )
+
+
+# Search Functionality
+
+
+class SearchView(TemplateView):
+    template_name = "search.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        query = self.request.GET.get("keyword", None)
+        context["search_results"] = Product.objects.filter(
+            Q(title__icontains=query) | Q(description__icontans=query)
+        )
+        return context

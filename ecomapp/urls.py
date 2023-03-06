@@ -20,6 +20,7 @@ from .views import (
     AdminOrderDetailView,
     AdminOrderListView,
     AdminOrderStatusChangeView,
+    SearchView,
 )
 
 app_name = "ecomapp"
@@ -56,5 +57,5 @@ urlpatterns = [
         AdminOrderStatusChangeView.as_view(),
         name="admin_change_order",
     ),
-    # path("search/", SearchView.as_view(), name="search"),
+    path("search/", SearchView.as_view(), name="search"),
 ]
