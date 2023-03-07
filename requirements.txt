@@ -4,3 +4,7 @@ sqlparse==0.4.3
 tzdata==2022.7
 pillow==9.0.1
 psycopg2-binary==2.9.3
+python-dotenv
+django-crispy-forms==1.14.0
+crispy-bootstrap5==0.6
+whitenoise==6.1.0

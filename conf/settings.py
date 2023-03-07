@@ -20,18 +20,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-8dt7a2!wlbmo(bv=mh&6xy95u1f!n-lx(easjlbwm1k+ahrbe^"
+import os
+from dotenv import load_dotenv
+
+
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','localhost',]
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.humanize',
+    "django.contrib.humanize",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -39,11 +43,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "ecomapp.apps.EcomappConfig",
-
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -57,7 +61,7 @@ ROOT_URLCONF = "conf.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / 'templates'],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -79,11 +83,11 @@ WSGI_APPLICATION = "conf.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "HOST":"db",
+        "HOST": "db",
         "NAME": "postgres",
         "USER": "postgres",
         "PASSWORD": "postgres",
-        "PORT":5432
+        "PORT": 5432,
     }
 }
 
@@ -123,17 +127,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "static/"
-STATICFILES_DIRS  = [
-    BASE_DIR / 'static',
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
 ]
-STATIC_ROOT = BASE_DIR / 'static_cdn'
-
-MEIDA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR /"media"
+STATIC_ROOT = BASE_DIR / "staticfile"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+MEIDA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-LOGIN_URL = 'ecomapp:customerlogin'
+LOGIN_URL = "ecomapp:customerlogin"
