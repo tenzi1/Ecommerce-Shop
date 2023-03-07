@@ -1,6 +1,12 @@
-<nav class="navbar navbar-expand-lg bg-light">
+<style>
+  .navbar{
+    background-color: rgba(75, 185, 248, 0.932);
+    color:white;
+  }
+</style>
+<nav class="navbar navbar-expand-lg">
   <div class="container">
-    <a class="navbar-brand" href="#">Ecomm</a>
+    <a class="navbar-brand" href="#">E-pasal</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -23,7 +29,7 @@
         
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
+            Categories
           </a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="#">Electronics Item</a></li>
@@ -35,7 +41,7 @@
 
         {% if not user.is_authenticated %}
             <li class="nav-item">
-          <a class="nav-link" href="{% url 'ecomapp:profile'%}">Profile</a>
+          <a class="nav-link" href="#">Profile</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'ecomapp:customerregistration'%}">Register</a>
@@ -45,7 +51,10 @@
           <a class="nav-link" href="{% url 'ecomapp:customerlogin'%}">Login</a>
         </li>
         {% else %}
-        <p>Welcome {{user.username}}</p>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'ecomapp:profile'%}">Welcome {{user.username}}</a>
+        </li>
+       
 <li class="nav-item">
           <a class="nav-link" href="{% url 'ecomapp:logout'%}">Logout</a>
         </li>

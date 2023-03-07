@@ -6,6 +6,9 @@ from django.views.generic import (
     DetailView,
     CreateView,
 )
+from django.urls import reverse
+from django.core.paginator import Paginator
+
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model, authenticate, login, logout
@@ -42,6 +45,7 @@ class EcomMixin(object):
 class HomeView(ListView):
     model = Product
     template_name = "home.html"
+    paginate_by = 4
 
 
 class AboutView(TemplateView):
@@ -197,10 +201,25 @@ class CheckoutView(LoginRequiredMixin, EcomMixin, CreateView):
             form.instance.total = form.instance.total = cart_obj.total
             form.instance.order_status = "Order Received"
             del self.request.session["cart_id"]
+            pm = form.cleaned_data.get("payment_method")
+            order = form.save()
+            if pm == "Khalti":
+                return redirect(
+                    reverse("ecomapp:khalti_request") + "?o_id=" + str(order.id)
+                )
         else:
             return redirect("ecomapp:home")
 
         return super().form_valid(form)
+
+
+# Khalti RequestView
+class KhaltiRequestView(View):
+    def get(self, request, *args, **kwargs):
+        o_id = request.GET.get("o_id")
+        order = Order.objects.get(id=o_id)
+        context = {"order": order}
+        return render(request, "payment/khalti_request.html", context)
 
 
 class CustomerRegistrationView(CreateView):

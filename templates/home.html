@@ -6,12 +6,11 @@ Home Page
 {% block content %}
     <h1>We are the emerging ecommerce in City.</h1>
 
-    <div class="row gx-5">
-    {% for product in product_list %}
-    
-      <div class="col-md-3">
+    <div class="row">
+    {% for product in page_obj %}
+      <div class="col-md-3 card m-1">
         <a href="{% url 'ecomapp:product-detail' product.slug %} " class="text-decoration-none text-dark">
-        <div class="img-container bg-light text-center">
+        <div class="img-container  bg-light text-center">
           <img src="{{ product.image.url}}" class="img-fluid" alt="" style="width:200;object-fit:cover;">
         </div>
         <div class="product-data">
@@ -19,13 +18,45 @@ Home Page
           <p>Price: <span class="text-decoration-line-through">  Rs.{{ product.marked_price}}</span>  Rs.{{product.selling_price}}</p>
         </div>
         <div>
-          <a href="{% url 'ecomapp:add-cart' product.id %}" class="btn btn-primary w-100">Add To Cart</a>
+          <a href="{% url 'ecomapp:add-cart' product.id %}" class="btn btn-primary">Add To Cart</a>
         </div>
   </a>
       </div>
-      
-
-
     {% endfor %}
+
+ 
+<nav class="fixed-bottom">
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+    <li class="page-item ">
+      <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+      <a href="#"  class="page-link">Previous</a>
+    </li>
+     {% endif%}
+{% for i in page_obj.paginator.page_range %}
+{% if i == page_obj.number %}
+    <li class="page-item active"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+ {% else %}
+ <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+ {% endif %}   
+ {% endfor %}  
+    <!-- <li class="page-item active" aria-current="page">
+      <a class="page-link" href="#">2</a>
+    </li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li> -->
+    {% if page_obj.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+    </li>
+    {%else%}
+     <li class="page-item disabled">
+      <a class="page-link" href="#">Next</a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
     </div>
 {% endblock %}

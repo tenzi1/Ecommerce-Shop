@@ -21,6 +21,7 @@ from .views import (
     AdminOrderListView,
     AdminOrderStatusChangeView,
     SearchView,
+    KhaltiRequestView,
 )
 
 app_name = "ecomapp"
@@ -35,6 +36,7 @@ urlpatterns = [
     path("manage-cart/<int:cp_id>/", ManageCartVie.as_view(), name="manage-cart"),
     path("empty-cart/", ClearCartView.as_view(), name="empty-cart"),
     path("checkout/", CheckoutView.as_view(), name="checkout"),
+    path("khalti-request/", KhaltiRequestView.as_view(), name="khalti_request"),
     path("register/", CustomerRegistrationView.as_view(), name="customerregistration"),
     path("login", CustomerLoginView.as_view(), name="customerlogin"),
     path("logout/", CustomerLogoutView.as_view(), name="logout"),
